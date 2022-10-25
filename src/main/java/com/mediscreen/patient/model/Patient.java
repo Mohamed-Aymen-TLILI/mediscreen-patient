@@ -1,3 +1,5 @@
+package com.mediscreen.patient.model;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
