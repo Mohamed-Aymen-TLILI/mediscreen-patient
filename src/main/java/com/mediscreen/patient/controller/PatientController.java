@@ -3,7 +3,8 @@ package com.mediscreen.patient.controller;
 import com.mediscreen.patient.exception.ValidationErrorHandlerController;
 import com.mediscreen.patient.model.Patient;
 import com.mediscreen.patient.service.PatientService;
-import org.springframework.ui.Model;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import static com.mediscreen.patient.exception.ValidationErrorHandlerController.
 
 @RestController
 @Slf4j
+@Api(tags = "Données API des patients")
 @RequestMapping("/api")
 public class PatientController {
 
@@ -29,6 +31,7 @@ public class PatientController {
     }
 
     @PostMapping("/patient/add")
+    @ApiOperation("Créer un nouveau patient")
     public ResponseEntity<Object> createdPatient(@RequestBody @Valid Patient patient, BindingResult bindingResult) throws ValidationErrorHandlerController {
         ResponseEntity<Object> message = getBindingResultErrors(bindingResult);
         if (message != null) throw new ValidationErrorHandlerController();
@@ -39,6 +42,7 @@ public class PatientController {
     }
 
     @GetMapping("/patients/patient/{id}")
+    @ApiOperation("Chercher un patient par son id")
     public ResponseEntity<Object> findPatientById(@PathVariable(value = "id") Long id) {
         Patient patient = patientService.findPatientById(id);
         if (patient == null ) {
@@ -49,6 +53,7 @@ public class PatientController {
     }
 
     @GetMapping("/patients/patient/family")
+    @ApiOperation("Chercher un patient par son nom de famille")
     public ResponseEntity<List<Patient>> findPatientByLastNameAndFirstName(@RequestParam(value = "lastName") String lastName, @RequestParam(value = "firstName") String firstName) {
         List<Patient> patientList = patientService.findPatientByLastNameAndFirstName(lastName, firstName);
         if (patientList.isEmpty()) {
@@ -60,6 +65,7 @@ public class PatientController {
     }
 
     @PutMapping("/patient/{id}")
+    @ApiOperation("Mise à jour les données du patient par son id")
     public ResponseEntity<Object> updatePatient(@PathVariable(value = "id") Long id, @Valid @RequestBody Patient patient, BindingResult result) throws ValidationErrorHandlerController {
         ResponseEntity<Object> messages = getBindingResultErrors(result);
         if (messages != null) throw new ValidationErrorHandlerController();
@@ -70,6 +76,7 @@ public class PatientController {
     }
 
     @GetMapping("/patients")
+    @ApiOperation("Chercher la liste des patients")
     public ResponseEntity<List<Patient>> findAllPatients() {
         List<Patient> patientList = patientService.findAllPatients();
         if (patientList.isEmpty()) {
@@ -79,6 +86,7 @@ public class PatientController {
     }
 
     @DeleteMapping("/patients/patientId/{id}")
+    @ApiOperation("Supprimer un patient par son id")
     public ResponseEntity<Object> deletePatientById(@PathVariable(value = "id") Long id) {
         Boolean deleted = patientService.deletePatientById(id);
         if (!deleted) {

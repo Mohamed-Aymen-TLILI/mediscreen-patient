@@ -1,0 +1,29 @@
+version: "3"
+services:
+  patientdb:
+    image: 'mysql:8.0.27'
+    container_name: patientdb
+    environment:
+      MYSQL_ROOT_PASSWORD: rootroot
+      MYSQL_DATABASE: mediscreen_patient
+    ports:
+      - "3306:3306"
+    volumes:
+      - /Users/mtlili/mediscreen-patient:/var/lib/mysql
+
+  mediscreen-patient:
+    image: patient
+    container_name: patient
+    restart: always
+    build:
+      context: "./"
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      MYSQL_HOST: mediscreen_patient
+      MYSQL_USER: root
+      MYSQL_PASSWORD: rootroot
+      MYSQL_PORT: 3306
+    depends_on:
+      - patientdb
