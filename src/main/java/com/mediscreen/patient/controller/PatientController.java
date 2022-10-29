@@ -19,6 +19,7 @@ import static com.mediscreen.patient.exception.ValidationErrorHandlerController.
 
 @RestController
 @Slf4j
+@CrossOrigin(origins = "http://localhost:4200")
 @Api(tags = "Données API des patients")
 @RequestMapping("/api")
 public class PatientController {
